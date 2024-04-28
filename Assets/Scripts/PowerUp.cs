@@ -28,13 +28,20 @@ public class PowerUp : MonoBehaviour
     void OnTriggerEnter(Collider other)
   {
     PlayerMovement PlayerMovement = other.gameObject.GetComponent<PlayerMovement>();
+        Player2Movement Player2Movement = other.gameObject.GetComponent<Player2Movement>();
 
-    if(PlayerMovement != null)
+        if (PlayerMovement != null)
     {
         
         StartCoroutine(SpeedPowerUp(PlayerMovement));
     }
-  }
+        if (Player2Movement != null)
+        {
+
+            StartCoroutine(SpeedPowerUp2(Player2Movement));
+        }
+
+    }
 
   public IEnumerator SpeedPowerUp(PlayerMovement PlayerMovement)
   {
@@ -53,15 +60,40 @@ public class PowerUp : MonoBehaviour
         Respawn();
 
   }
+    public IEnumerator SpeedPowerUp2(Player2Movement Player2Movement)
+    {
+        //speed = speedBoost;
+        collider.enabled = false;
+        artToDisable.SetActive(false);
 
-  private void ActivatePowerUp(PlayerMovement PlayerMovement)
+        ActivatePowerUp2(Player2Movement);
+
+        yield return new WaitForSeconds(powerUpTime);
+        //speed = speedNorm;
+
+        DeactivatePowerUp2(Player2Movement);
+
+        yield return new WaitForSeconds(timeTillResapwn);
+        Respawn();
+
+    }
+
+    private void ActivatePowerUp(PlayerMovement PlayerMovement)
   {
     PlayerMovement.SetMoveSpeed(speedBoost);
   }
-  private void DeactivatePowerUp(PlayerMovement PlayerMovement)
+    private void ActivatePowerUp2(Player2Movement Player2Movement)
+    {
+        Player2Movement.SetMoveSpeed(speedBoost);
+    }
+    private void DeactivatePowerUp(PlayerMovement PlayerMovement)
   {
     PlayerMovement.SetMoveSpeed(-speedBoost);
   }
+    private void DeactivatePowerUp2(Player2Movement Player2Movement)
+    {
+        Player2Movement.SetMoveSpeed(-speedBoost);
+    }
 
     void Respawn()
     {
